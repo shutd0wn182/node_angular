@@ -1,0 +1,6 @@
+.item.item-thumbnail-left.film{
+    min-height:150px;
+}
+.item.item-thumbnail-left.film > .film-image{
+    min-height: 120px;
+}
