@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var PageParser = require('./page_parser.js');
+var schedule = require('node-schedule');
 
 /*init ExApp*/
 var app = express();
@@ -20,6 +21,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+var cron;
 var dbResults = [];
 var urlDB = 'mongodb://localhost:27017/test';
 // var urlParse = 'http://fs.to/video/serials/i4qyEFAKeiRHiU7usAKGxqw-sotnya.html';
@@ -52,9 +54,20 @@ app.post('/addfilm/token=myapp', function (req, res) {
 
     pageParserObj.getPageInfo().then(function () {
         pageData = pageParserObj.getPageData();
-
         if(!pageParserObj.isExist(dbResults, pageData.name)){
-            pageParserObj.addToDb(dbResults, pageData.name, pageData.poster, pageData.season, pageData.series);
+            console.log('pageData', pageData);
+            pageParserObj.addToDb(pageData.name, pageData.poster, pageData.season, pageData.series);
+
+
+            /*CRON*/
+            // cron = schedule.sheduleJob('* 3 * * * *', function () {
+            //     pageParserObj.getPageInfo().then(function () {
+            //         var newPageData = pageParserObj.getPageData();
+            //         console.log('new cron job reached',  newPageData.series);
+            //     });
+            // });
+
+
             dbResults.push(pageData);
             res.send(dbResults);
         }

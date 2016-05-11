@@ -63,9 +63,9 @@ PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
             series : _series
         });
 
-        dbCollection.find().toArray(function (err, results) {
-            console.log('results', results);
-        });
+        // dbCollection.find().toArray(function (err, results) {
+        //     console.log('results', results);
+        // });
 
         // dbCollection.count(function (err, count) {
         //     console.log('count', count);
