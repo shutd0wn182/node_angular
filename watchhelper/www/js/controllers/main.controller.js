@@ -14,11 +14,11 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', function (f
         }.bind(this));
     };
 
-    this.getFilmData();
+    // this.getFilmData();
 
     this.addFilm = function () {
         filmFactory.addFilm(this.url).then(function (value) {
-            this.getFilmData();
+            // this.getFilmData();
         }.bind(this));
     };
 

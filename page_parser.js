@@ -2,7 +2,9 @@ var request = require("request");
 var cheerio = require("cheerio");
 var MongoClient = require('mongodb').MongoClient;
 var Promise = require('promise');
+var pg = require('pg');
 
+var urlDB = "postgres://postgres:1111@localhost/films";
 var PageParser = function (url) {
     this.url = url;
 };
@@ -51,17 +53,20 @@ PageParser.prototype.isExist = function (_dbData, _name) {
 };
 
 PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
-    MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
-        var dbCollection = db.collection('trackDb');
-
+    pg.connect(urlDB, function(err, client, done) {
         console.log('adding to db..');
 
-        dbCollection.insertOne({
-            name : _name,
-            poster : _poster,
-            season : _season,
-            series : _series
-        });
+        client.query('INSERT INTO films (name, poster, season, series) VALUES ($1, $2, $3, $4)', [_name, _poster, _season, _series]);
+    });
+    // MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
+    //     var dbCollection = db.collection('trackDb');
+    //
+    //     dbCollection.insertOne({
+    //         name : _name,
+    //         poster : _poster,
+    //         season : _season,
+    //         series : _series
+    //     });
 
         // dbCollection.find().toArray(function (err, results) {
         //     console.log('results', results);
@@ -70,7 +75,9 @@ PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
         // dbCollection.count(function (err, count) {
         //     console.log('count', count);
         // });
-    });
+    // });
+
+
 };
 
 module.exports = PageParser;

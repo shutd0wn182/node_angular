@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var PageParser = require('./page_parser.js');
 var schedule = require('node-schedule');
+var pg = require('pg');
 
 /*init ExApp*/
 var app = express();
@@ -23,20 +24,37 @@ app.use(function(req, res, next) {
 
 var cron;
 var dbResults = [];
-var urlDB = 'mongodb://localhost:27017/test';
-// var urlParse = 'http://fs.to/video/serials/i4qyEFAKeiRHiU7usAKGxqw-sotnya.html';
+var urlDB = "postgres://postgres:1111@localhost/films";
 /*connect to DB*/
 
+/*
+Mongo*/
+/*
 MongoClient.connect(urlDB, function(err, db) {
     var dbCollection = db.collection('trackDb');
-
-    // db.collection('trackDb').remove({name:' Тёмное дитя '});
 
     dbCollection.find().toArray(function (err, results) {
         if(results.length) {
             dbResults = results;
         }
     });
+});
+*/
+
+/*
+Postgres
+*/
+pg.connect(urlDB, function(err, client, done) {
+    if(err) {
+        return console.error('error fetching client from pool', err);
+    }
+    else{
+        console.log("NICE!!!");
+
+        client.query('SELECT (name) AS name FROM films', function (err, result) {
+            console.log(result.rows);
+        });
+    }
 });
 
 app.get('/', function (req, res) {
