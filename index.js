@@ -5,9 +5,12 @@ var MongoClient = require('mongodb').MongoClient;
 var PageParser = require('./page_parser.js');
 var schedule = require('node-schedule');
 var pg = require('pg');
-
+var cors = require('cors');
 /*init ExApp*/
 var app = express();
+app.use(cors());
+app.set('port', (process.env.PORT || 5000));
+
 
 /*use parser*/
 app.use(bodyParser.urlencoded({
@@ -16,15 +19,11 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
 var cron;
 var dbResults = [];
-var urlDB = "postgres://postgres:1111@localhost/films";
+// var urlDB = "postgres://postgres:1234@localhost/films";
+var urlDB = "postgres://iwsgbhihwkrmxn:0FpUatSuvlc_u4iE_ERk0gGm7I@ec2-54-243-201-144.compute-1.amazonaws.com:5432/d6t02bvudsqu1n";
+
 /*connect to DB*/
 
 /*
@@ -95,5 +94,6 @@ app.post('/addfilm/token=myapp', function (req, res) {
     });
 });
 
-/*start web server on port 3000*/
-app.listen(3000, function () {});
+app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
+});

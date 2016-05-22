@@ -1,5 +1,5 @@
 angular.module('watchHelper').controller('mainCtrl', ['filmFactory', function (filmFactory) {
-    var dbUrl = 'http:///localhost:3000/getfilms/token=myapp';
+    var dbUrl = 'http://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
 
     this.getFilmData = function () {
         filmFactory.getFilmData(dbUrl).then(function (value) {
@@ -14,11 +14,11 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', function (f
         }.bind(this));
     };
 
-    // this.getFilmData();
+    this.getFilmData();
 
     this.addFilm = function () {
         filmFactory.addFilm(this.url).then(function (value) {
-            // this.getFilmData();
+            this.getFilmData();
         }.bind(this));
     };
 
