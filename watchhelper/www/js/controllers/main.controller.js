@@ -1,5 +1,6 @@
 angular.module('watchHelper').controller('mainCtrl', ['filmFactory', function (filmFactory) {
-    var dbUrl = 'http://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
+    // var dbUrl = 'http://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
+    var dbUrl = 'http://localhost:5000/getfilms/token=myapp';
 
     this.getFilmData = function () {
         filmFactory.getFilmData(dbUrl).then(function (value) {
