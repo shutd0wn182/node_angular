@@ -1,11 +1,10 @@
 var request = require("request");
 var cheerio = require("cheerio");
-var MongoClient = require('mongodb').MongoClient;
 var cron = require('node-cron');
 var Promise = require('promise');
-var pg = require('pg');
+var Films = require('./models/film.model.js');
+var Shedules = require('./models/shedule.model.js');
 
-var urlDB = "postgres://postgres:1111@localhost/films";
 // var urlDB = "postgres://iwsgbhihwkrmxn:0FpUatSuvlc_u4iE_ERk0gGm7I@ec2-54-243-201-144.compute-1.amazonaws.com:5432/d6t02bvudsqu1n";
 
 var PageParser = function (url) {
@@ -35,7 +34,7 @@ PageParser.prototype.getPageInfo = function () {
                         Number($infoBlock.split('серия')[1])
                 };
 
-console.log('film.series', film.series);
+                console.log('film.series', film.series);
                 resolve(this.setPageData(film));
             }
             else {
@@ -58,68 +57,70 @@ PageParser.prototype.isExist = function (_dbData, _name) {
 };
 
 PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
-    pg.connect(urlDB, function(err, client, done) {
-        console.log('adding to db..');
-
-        client.query('INSERT INTO films (name, poster, season, series) VALUES ($1, $2, $3, $4)', [_name, _poster, _season, _series]);
+    console.log('adding to DB...');
+    console.log(this.url);
+    var films = new Films({
+        name : _name,
+        poster : _poster,
+        season : _season,
+        series : _series
     });
-    // MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
-    //     var dbCollection = db.collection('trackDb');
-    //
-    //     dbCollection.insertOne({
-    //         name : _name,
-    //         poster : _poster,
-    //         season : _season,
-    //         series : _series
-    //     });
+    
+    films.save(function (error) {
+        if(!error){
+            console.log('add query finished');
+        }
+        else{
+            console.error('error', error);
+        }
+    });
+    
 
-        // dbCollection.find().toArray(function (err, results) {
-        //     console.log('results', results);
-        // });
+    var shedules = new Shedules({
+        film_url : this.url
+    });
 
-        // dbCollection.count(function (err, count) {
-        //     console.log('count', count);
-        // });
-    // });
+    shedules.save(function (error) {
+        if(!error){
+            console.log('new shedule saved!');
+        }
+        else{
+            console.error('error ', error);
+        }
+    });
 };
 
 PageParser.prototype.setCronJob = function () {
-    this.cronJob = cron.schedule('0 */5 * * * *', function() {
+    this.cronJob = cron.schedule('0 */2 * * * *', function() {
         var pageData;
 
-        console.log('=== new CRON job reached... ===');
+        console.log('=== new CRON job start... ===');
 
         this.getPageInfo().then(function () {
             pageData = this.getPageData();
             console.log('pageData.series - ', pageData.series);
 
-            this.checkDbValue(pageData.series);
+            this.checkDbValue(pageData.name, pageData.series);
         }.bind(this));
     }.bind(this), false);
 
     this.cronJob.start();
 };
 
-PageParser.prototype.checkDbValue = function (_series) {
-    var results;
+PageParser.prototype.checkDbValue = function (_name, _series) {
+    var query = Films.find();
     console.log('checking value in db..');
 
-    pg.connect(urlDB, function(err, client, done) {
+    query.run({},function(err, posts){
         if(!err){
-            client.query('SELECT (name, poster, season, series) AS name, poster, season, series FROM films', function (error, result) {
-                if(!error){
-                    results = result.rows;
-
-                    for(var i = 0; i < results.length; i++){
-                        if(results[i].series != _series){
-                            console.log('UPdate new series!');
-                        }
-                        else{
-                            console.log('nothing new...');
-                        }
-                    }
+            for(var i = 0; i < posts.length; i++){
+                if(posts[i].name == _name && posts[i].series != _series){
+                    console.log('Update new series!');
                 }
-            });
+                else{
+                    console.log('nothing new...');
+                }
+            }
         }
     });
 };

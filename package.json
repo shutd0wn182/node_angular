@@ -15,10 +15,10 @@
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "mongodb": "^2.1.18",
-    "node-schedule": "^1.1.0",
     "pg": "4.x",
     "promise": "^7.1.1",
     "request": "^2.72.0",
-    "node-cron": "~1.1.1"
+    "node-cron": "~1.1.1",
+    "caminte": "~0.2.12"
   }
 }

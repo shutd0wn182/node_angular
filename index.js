@@ -1,9 +1,10 @@
 /*inject modules*/
 var express = require('express');
 var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient;
 var PageParser = require('./page_parser.js');
-var pg = require('pg');
+var Films = require('./models/film.model.js');
+var Shedules = require('./models/shedule.model.js');
+
 var cors = require('cors');
 
 /*init ExApp*/
@@ -20,43 +21,16 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 var dbResults = [];
-var urlDB = "postgres://postgres:1111@localhost/films";
 // var urlDB = "postgres://iwsgbhihwkrmxn:0FpUatSuvlc_u4iE_ERk0gGm7I@ec2-54-243-201-144.compute-1.amazonaws.com:5432/d6t02bvudsqu1n";
 
-/*connect to DB*/
+/*get films from model*/
+var query = Films.find();
 
-/*
- Mongo*/
-/*
- MongoClient.connect(urlDB, function(err, db) {
- var dbCollection = db.collection('trackDb');
-
- dbCollection.find().toArray(function (err, results) {
- if(results.length) {
- dbResults = results;
- }
- });
- });
- */
-
-/*
- Postgres
- */
-pg.connect(urlDB, function(err, client, done) {
-    if(err) {
-        return console.error('error fetching client from pool', err);
-    }
-    else{
-        console.log("NICE!!!");
-
-        client.query('SELECT (name, poster, season, series) AS name, poster, season, series FROM films', function (err, result) {
-            dbResults = result.rows;
-            console.log(dbResults);
-        });
+query.run({},function(err, posts){
+    if(!err){
+        dbResults = posts;
     }
 });
-
-
 
 app.get('/', function (req, res) {
     res.send('index page');
