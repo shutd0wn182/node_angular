@@ -1,5 +1,5 @@
 <ion-view class="main-content">
-    <ion-content class="layer">
+    <ion-content class="layer" ng-show="mC.showList">
         <div class="list">
             <a ng-repeat="film in mC.filmData" class="item item-thumbnail-left film">
                 <img class="film-image" ng-src="{{film.poster}}" alt="{{film.name}}" title="{{film.name}}">
@@ -9,7 +9,7 @@
         </div>
 
         <label class="item item-input item-floating-label">
-            <span class="input-label"> </span>
+            <span class="input-label"></span>
             <input type="text" placeholder="Paste link for film(from FS.TO) :" ng-model="mC.url">
         </label>
         <button class="button-block button icon-left ion-ios-plus-outline button-positive" ng-click="mC.addFilm()">Add</button>

@@ -11,17 +11,21 @@ angular.module('watchHelper').factory('filmFactory', ['$http', '$q', function ($
                     deferred.resolve(response.data);
                 },
                 function (error) {
-                    console.error('ERROR! ', error);
+                    console.error('ERROR! Problem with connection to server ', error);
                 }
             );
 
             return deferred.promise;
         },
         
-        addFilm : function (_url) {
+        addFilm : function (_url, _email) {
             var deferred = $q.defer();
 
-            $http.post(addFilmUrl, {filmUrl : _url}).then(
+            $http.post(addFilmUrl,
+                {
+                    filmUrl : _url,
+                    userEmail : _email
+                }).then(
                 function (response) {
                     deferred.resolve(response.data);
                 },

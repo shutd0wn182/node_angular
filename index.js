@@ -44,7 +44,7 @@ app.post('/getfilms/token=myapp', function (req, res) {
 
 app.post('/addfilm/token=myapp', function (req, res) {
     var pageData;
-    var pageParserObj = new PageParser(req.body.filmUrl);
+    var pageParserObj = new PageParser(req.body.filmUrl, req.body.userEmail);
 
     pageParserObj.getPageInfo().then(function () {
         pageData = pageParserObj.getPageData();
