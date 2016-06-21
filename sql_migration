@@ -1,0 +1,21 @@
+PostgreSQL queries
+
+CREATE TABLE films
+(
+  name character varying(255),
+  poster character varying,
+  season integer,
+  series integer,
+  id serial NOT NULL,
+  user_email character varying(255),
+  new_series integer,
+  CONSTRAINT films_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE shedules
+(
+  film_url character varying(255),
+  film_id integer,
+  id serial NOT NULL,
+  CONSTRAINT shedules_pkey PRIMARY KEY (id)
+);
