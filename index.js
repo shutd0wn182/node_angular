@@ -4,6 +4,8 @@ var bodyParser = require('body-parser');
 var PageParser = require('./page_parser.js');
 var Films = require('./models/film.model.js');
 var Shedules = require('./models/shedule.model.js');
+var Auth = require('./models/auth.model.js');
+var cookieParser = require('cookie-parser');
 
 var cors = require('cors');
 
@@ -12,6 +14,8 @@ var app = express();
 app.use(cors());
 
 app.set('port', (process.env.PORT || 5000));
+
+app.use(cookieParser())
 
 /*use parser*/
 app.use(bodyParser.urlencoded({
@@ -69,6 +73,27 @@ app.post('/addfilm/token=myapp', function (req, res) {
             console.error('Error ,value allready exist in DB');
         }
     });
+});
+
+app.post('/authentication/token=myapp', function(req, res){
+    if(req.body.userEmail){
+        Auth.findOrCreate({
+            email : req.body.userEmail
+        }, {
+            email : req.body.userEmail,
+            value : 'stored',
+            expires : 604800
+        },
+        function(error, auth){
+            if(!error){
+                console.log(auth);
+                res.send(auth);
+            }
+            else{
+                console.error('ERROR in auth query ', error);
+            }
+        });
+    }
 });
 
 app.listen(app.get('port'), function() {

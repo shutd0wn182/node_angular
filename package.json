@@ -20,6 +20,7 @@
     "request": "^2.72.0",
     "node-cron": "~1.1.1",
     "caminte": "~0.2.12",
-    "sendmail": "~0.2. 1"
+    "sendmail": "~0.2. 1",
+    "cookie-parser": "~1.4.3"
   }
 }

@@ -130,6 +130,10 @@ PageParser.prototype.checkDbValue = function (_name, _series, _user_email) {
     },function (err, film) {
         if(!err){
             this.updateSeriesCount(film.id, film.series-_series);
+            this.sendMail(film.series-_series, _user_email);
+        }
+        else{
+            console.error('ERROR checkDbValue', err);
         }
     }.bind(this));
 };
@@ -150,12 +154,12 @@ PageParser.prototype.updateSeriesCount = function (_id, _series_count) {
     });
 };
 
-PageParser.prototype.sendMail = function (_new_series, _user_email) {
+PageParser.prototype.sendMail = function (_series_count, _user_email) {
     var mailOptions = {
         from: '"WatchHelperApp" <nodemail@tester.com>',
         to: _user_email,
         subject: 'New Series',
-        text: 'There is '+_new_series+' new series!',
+        text: 'There is '+_series_count+' new series!',
         html: '<b>Check your app</b>'
     };
 
