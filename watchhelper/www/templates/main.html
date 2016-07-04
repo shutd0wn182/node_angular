@@ -4,7 +4,7 @@
             <a ng-repeat="film in mC.filmData" class="item item-thumbnail-left film">
                 <img class="film-image" ng-src="{{film.poster}}" alt="{{film.name}}" title="{{film.name}}">
                 <h2>{{film.name}}</h2>
-                <p>{{film.season}} ( {{film.series}} Серия) <span class="badge badge-assertive" ng-if="film.status">{{film.status}}</span></p>
+                <p>{{film.season}} ( {{film.series}} Серия) <span class="badge badge-assertive" ng-if="film.new_series">{{new_series}}</span></p>
             </a>
         </div>
 

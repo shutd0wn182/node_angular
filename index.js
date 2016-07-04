@@ -48,9 +48,16 @@ app.post('/addfilm/token=myapp', function (req, res) {
 
     pageParserObj.getPageInfo().then(function () {
         pageData = pageParserObj.getPageData();
-        if(!pageParserObj.isExist(dbResults, pageData.name)){
+
+        if(!pageParserObj.isExist(dbResults, pageData.name, req.body.userEmail)){
             console.log('pageData', pageData);
-            pageParserObj.setCronJob();
+
+            if(!pageData.is_ended){
+                pageParserObj.setCronJob();
+            }
+            else{
+                console.warn('The serieal is ended , new series are not release anymore');
+            }
 
             pageParserObj.addToDb(pageData.name, pageData.poster, pageData.season, pageData.series);
 
@@ -63,7 +70,6 @@ app.post('/addfilm/token=myapp', function (req, res) {
         }
     });
 });
-
 
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));

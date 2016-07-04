@@ -35,10 +35,11 @@ PageParser.prototype.getPageInfo = function () {
                     poster : $('.poster-main img').attr('src'),
                     season : Number($infoBlock.split('серия')[0].split('сезон')[1]),
                     series : ($infoBlock.split('серия')[1].indexOf('(финал)') > -1) ? Number($infoBlock.split('серия')[1].split('(финал)')[0]) :
-                        Number($infoBlock.split('серия')[1])
+                        Number($infoBlock.split('серия')[1]),
+                    user_email : this.userEmail,
+                    is_ended : $infoBlock.split('серия')[1].indexOf('(финал)') > -1
                 };
-
-                console.log('film.series', film.series);
+                
                 resolve(this.setPageData(film));
             }
             else {
@@ -48,10 +49,10 @@ PageParser.prototype.getPageInfo = function () {
     }.bind(this));
 };
 
-PageParser.prototype.isExist = function (_dbData, _name) {
+PageParser.prototype.isExist = function (_dbData, _name, _email) {
     if(_dbData.length){
         for(var i = 0; i < _dbData.length; i++){
-            if(_dbData[i].name == _name){
+            if(_dbData[i].name == _name && _dbData[i].user_email == _email){
                 return true;
             }
         }
@@ -71,7 +72,8 @@ PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
         poster : _poster,
         season : _season,
         series : _series,
-        user_email : userEmail
+        user_email : userEmail,
+        new_series : 0
     });
 
     films.save(function (error) {
@@ -98,7 +100,7 @@ PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
 };
 
 PageParser.prototype.setCronJob = function () {
-    this.cronJob = cron.schedule('0 */1 * * * *', function() {
+    this.cronJob = cron.schedule('0 */5 * * * *', function() {
         var pageData;
 
         console.log('=== new CRON job start... ===');
@@ -115,35 +117,54 @@ PageParser.prototype.setCronJob = function () {
 };
 
 PageParser.prototype.checkDbValue = function (_name, _series, _user_email) {
-    var query = Films.find();
     console.log('checking value in db..');
 
-    query.run({},function(err, posts){
-        if(!err){
-            for(var i = 0; i < posts.length; i++){
-                if(posts[i].name == _name && posts[i].series != _series && posts[i].user_email == _user_email){
-                    console.log('Update new series!');
-
-                    var mailOptions = {
-                        from: '"WatchHelperApp" <nodemail@tester.com>',
-                        to: _user_email,
-                        subject: 'New Series',
-                        text: 'There is no new series yet',
-                        html: '<b>Hello world </b>'
-                    };
-
-                    transporter.sendMail(mailOptions, function(error, info){
-                        if(error){
-                            return console.log(error);
-                        }
-                        console.log('Message sent: ' + info.response);
-                    });
-                }
-                else{
-                    console.log('nothing new');
-                }
+    Films.findOne({
+        where : {
+            name : _name,
+            user_email : _user_email,
+            series : {
+                ne : _series
             }
         }
+    },function (err, film) {
+        if(!err){
+            this.updateSeriesCount(film.id, film.series-_series);
+        }
+    }.bind(this));
+};
+
+PageParser.prototype.updateSeriesCount = function (_id, _series_count) {
+    Films.update({
+        where : {
+            id : _id
+        }
+    }, {
+        new_series : _series_count
+    }, function (err) {
+        if(err){
+            console.error('Error in update');
+        }
+
+        console.log('New series are successfully updated');
+    });
+};
+
+PageParser.prototype.sendMail = function (_new_series, _user_email) {
+    var mailOptions = {
+        from: '"WatchHelperApp" <nodemail@tester.com>',
+        to: _user_email,
+        subject: 'New Series',
+        text: 'There is '+_new_series+' new series!',
+        html: '<b>Check your app</b>'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            return console.log(error);
+        }
+
+        console.log('Message sent: ' + info.response);
     });
 };
 
