@@ -37,13 +37,25 @@ query.run({},function(err, posts){
 });
 
 app.get('/', function (req, res) {
-    res.send('index page');
+    res.send('<h1 align="center">NodeJS server works!</h1>');
 });
 
 /*API*/
 app.post('/getfilms/token=myapp', function (req, res) {
-    console.log('dbResults = ', dbResults);
-    res.send(dbResults);
+
+    if(req.body.userEmail){
+        Films.find({
+                where : {
+                    user_email : req.body.userEmail
+                }
+            },
+            function(error, films){
+                console.log('...db records for email '+req.body.userEmail+': ', films);
+                res.send(films);
+            }
+        );
+    }
+
 });
 
 app.post('/addfilm/token=myapp', function (req, res) {
@@ -73,27 +85,6 @@ app.post('/addfilm/token=myapp', function (req, res) {
             console.error('Error ,value allready exist in DB');
         }
     });
-});
-
-app.post('/authentication/token=myapp', function(req, res){
-    if(req.body.userEmail){
-        Auth.findOrCreate({
-            email : req.body.userEmail
-        }, {
-            email : req.body.userEmail,
-            value : 'stored',
-            expires : 604800
-        },
-        function(error, auth){
-            if(!error){
-                console.log(auth);
-                res.send(auth);
-            }
-            else{
-                console.error('ERROR in auth query ', error);
-            }
-        });
-    }
 });
 
 app.listen(app.get('port'), function() {

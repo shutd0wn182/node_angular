@@ -1,29 +1,17 @@
-angular.module('watchHelper').factory('toolsFactory', ['$http', function($http){
-    var sessionUrl = 'http://localhost:5000/authentication/token=myapp';
+angular.module('watchHelper').factory('toolsFactory', ['$cookies', function($cookies){
+    var sessionUrl = 'http://192.168.0.129:5000/authentication/token=myapp';
 
     return {
-        setSession : function(_email) {
-            return $http.post(sessionUrl, {
-                userEmail : _email
-            }).then(
-                function (response) {
-                    return response.data;
-                },
-                function (error) {
-                    console.error('ERROR in setting session', error);
-                }
-            );
+        setCookie : function (_name, _value, _expires) {
+            var date = new Date();
+            var expiresDate = new Date(date.getTime() + _expires);
+            $cookies.put(_name, _value, {expires : expiresDate});
+
+            return true;
         },
 
-        getSession : function(){
-            return $http.post(sessionUrl).then(
-                function (response) {
-                    return response.data;
-                },
-                function (error) {
-                    console.error('error in getting session', error);
-                }
-            )
+        getCookie : function(_name){
+            return $cookies.get(_name);
         }
     }
 }]);

@@ -1,6 +1,6 @@
 angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFactory', '$ionicPopup', '$scope', function (filmFactory, toolsFactory, $ionicPopup, $scope) {
     // var dbUrl = 'http://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
-    var dbUrl = 'http://localhost:5000/getfilms/token=myapp';
+    var dbUrl = 'http://192.168.0.129:5000/getfilms/token=myapp';
     /*create PopUP*/
 
     this.showPopup = function () {
@@ -21,12 +21,7 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
                                 template : 'Email not valid'
                             });
                         } else {
-
-                            toolsFactory.setSession($scope.mC.email).then(function (value) {
-                                console.log('value', value);
-                                $scope.mC.authStatus = value;
-                                $scope.mC.showList = true;
-                            });
+                            $scope.mC.showList = toolsFactory.setCookie('userEmail', $scope.mC.email, 60*60*24*14*1000);
                         }
                     }
                 }
@@ -34,17 +29,18 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
         });
     };
 
-    toolsFactory.getSession().then(function(value){
-        this.authStatus = value;
-    }.bind(this));
-
     /*run popup*/
-    if(!this.authStatus){
+    this.userEmail = toolsFactory.getCookie('userEmail');
+
+    if(!this.userEmail){
         this.showPopup();
+    }
+    else{
+        this.showList = true;
     }
 
     this.getFilmData = function () {
-        filmFactory.getFilmData(dbUrl).then(function (value) {
+        filmFactory.getFilmData(dbUrl, this.userEmail).then(function (value) {
             this.filmData = value;
         }.bind(this));
     };

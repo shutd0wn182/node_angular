@@ -4,3 +4,13 @@
 .item.item-thumbnail-left.film > .film-image{
     min-height: 120px;
 }
+ion-view.main-content{
+    background-image: url('../img/bg2.jpg');
+    background-size: 100%;
+}
+ion-content.layer{
+    background-color: rgba(0,0,0,0.6);
+}
+ion-content.layer .list a{
+    background: inherit;
+}
