@@ -1,6 +1,6 @@
 angular.module('watchHelper').factory('filmFactory', ['$http', 'toolsFactory', function ($http, toolsFactory) {
-    // var addFilmUrl = 'http://evening-oasis-38864.herokuapp.com/addfilm/token=myapp';
-    var addFilmUrl = 'http://192.168.0.129:5000/addfilm/token=myapp';
+    var addFilmUrl = 'https://evening-oasis-38864.herokuapp.com/addfilm/token=myapp';
+    // var addFilmUrl = 'http://localhost:5000/addfilm/token=myapp';
 
     return {
         getFilmData : function (_url, _email) {

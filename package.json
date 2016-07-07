@@ -11,16 +11,16 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.0",
+    "caminte": "~0.2.12",
     "cheerio": "^0.20.0",
+    "cookie-parser": "~1.4.3",
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "mongodb": "^2.1.18",
+    "node-cron": "~1.1.1",
+    "nodemailer": "^2.4.2",
     "pg": "4.x",
     "promise": "^7.1.1",
-    "request": "^2.72.0",
-    "node-cron": "~1.1.1",
-    "caminte": "~0.2.12",
-    "sendmail": "~0.2. 1",
-    "cookie-parser": "~1.4.3"
+    "request": "^2.72.0"
   }
 }

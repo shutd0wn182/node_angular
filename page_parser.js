@@ -126,10 +126,10 @@ PageParser.prototype.checkDbValue = function (_name, _series, _user_email) {
             series : {
                 ne : _series
             }
+            // series : _series
         }
     },function (err, film) {
         if(!err){
-            console.log('film===', film);
             this.updateSeriesCount(film.id, film.series-_series);
             this.sendMail(film.series-_series, _user_email);
         }

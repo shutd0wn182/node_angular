@@ -1,8 +1,12 @@
-.item.item-thumbnail-left.film{
-    min-height:150px;
+.item.item-thumbnail-left.film h2,
+.item.item-thumbnail-left.film p{
+    color:#f7f7f7;
 }
 .item.item-thumbnail-left.film > .film-image{
     min-height: 120px;
+}
+.item.item-thumbnail-left.film{
+    min-height: 145px;
 }
 ion-view.main-content{
     background-image: url('../img/bg2.jpg');

@@ -1,6 +1,6 @@
 angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFactory', '$ionicPopup', '$scope', function (filmFactory, toolsFactory, $ionicPopup, $scope) {
-    // var dbUrl = 'http://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
-    var dbUrl = 'http://192.168.0.129:5000/getfilms/token=myapp';
+    // var dbUrl = 'http://localhost:5000/getfilms/token=myapp';
+    var dbUrl = 'https://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
     /*create PopUP*/
 
     this.showPopup = function () {
