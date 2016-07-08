@@ -8,6 +8,7 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
             template: '<input type="email" ng-model="mC.email">',
             title: 'Enter your email',
             subTitle: 'Please type valid email',
+            cssClass : 'user-email',
             scope: $scope,
             buttons: [
                 {
@@ -16,6 +17,7 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
                     onTap: function(e) {
                         if (!this.email) {
                             e.preventDefault();
+
                             $ionicPopup.alert({
                                 title : 'Validation Error',
                                 template : 'Email not valid'
@@ -38,7 +40,7 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
     };
 
     this.addFilm = function () {
-        filmFactory.addFilm(this.url, this.email).then(function (value) {
+        filmFactory.addFilm(this.url, this.email).then(function () {
             this.getFilmData();
             this.url = '';
         }.bind(this));
@@ -55,5 +57,4 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
         this.getFilmData();
         this.showList = true;
     }
-
 }]);

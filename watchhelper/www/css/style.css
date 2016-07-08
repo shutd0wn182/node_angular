@@ -18,3 +18,43 @@ ion-content.layer{
 ion-content.layer .list a{
     background: inherit;
 }
+.popup-container .popup{
+    background: none;
+}
+.popup-head{
+    border: none;
+}
+.popup-title {
+    font-size: 30px;
+    color: blanchedalmond;
+}
+.popup-sub-title{
+    font-size: 17px;
+    color: powderblue;
+}
+.popup-container .popup-body{
+    border-bottom: none;
+    text-align: center;
+}
+.user-email .popup-body{
+    padding: 0;
+    border-bottom: 2px solid blanchedalmond;
+}
+.popup-container .popup-body > span{
+    font-size: 20px;
+    color: powderblue;
+}
+.popup-body input{
+    background-color: rgba(255,255,255,0);
+    color: powderblue;
+    font-size: 24px;
+}
+.popup-buttons{
+    padding: 10px 0;
+    min-height: 75px;
+}
+.popup-buttons .button.button-positive{
+    background-color: rgba(0,0,0,0);
+    border: 2px solid blanchedalmond;
+    color: blanchedalmond;
+}
