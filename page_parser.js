@@ -4,11 +4,9 @@ var cron = require('node-cron');
 var Promise = require('promise');
 var Films = require('./models/film.model.js');
 var Shedules = require('./models/shedule.model.js');
-var nodemailer = require('nodemailer');
+var Tools = require('./tools.js');
 
-// var urlDB = "postgres://iwsgbhihwkrmxn:0FpUatSuvlc_u4iE_ERk0gGm7I@ec2-54-243-201-144.compute-1.amazonaws.com:5432/d6t02bvudsqu1n";
-
-var transporter = nodemailer.createTransport('smtps://masterrandrew%40gmail.com:Blink182182@smtp.gmail.com');
+var tools = new Tools();
 
 var PageParser = function (_url, _userEmail) {
     this.url = _url;
@@ -131,7 +129,7 @@ PageParser.prototype.checkDbValue = function (_name, _series, _user_email) {
     },function (err, film) {
         if(!err){
             this.updateSeriesCount(film.id, film.series-_series);
-            this.sendMail(film.series-_series, _user_email);
+            tools.sendMail(_user_email, 'New Series', 'There is '+film.series-_series+' new series!', '<b>Check your app</b>');
         }
         else{
             console.error('ERROR checkDbValue', err);
@@ -152,24 +150,6 @@ PageParser.prototype.updateSeriesCount = function (_id, _series_count) {
         }
 
         console.log('New series are successfully updated');
-    });
-};
-
-PageParser.prototype.sendMail = function (_series_count, _user_email) {
-    var mailOptions = {
-        from: '"WatchHelperApp" <nodemail@tester.com>',
-        to: _user_email,
-        subject: 'New Series',
-        text: 'There is '+_series_count+' new series!',
-        html: '<b>Check your app</b>'
-    };
-
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            return console.log(error);
-        }
-
-        console.log('Message sent: ' + info.response);
     });
 };
 

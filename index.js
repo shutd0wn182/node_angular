@@ -6,7 +6,7 @@ var Films = require('./models/film.model.js');
 var Shedules = require('./models/shedule.model.js');
 var Auth = require('./models/auth.model.js');
 var cookieParser = require('cookie-parser');
-
+var Tools = require('./tools.js');
 var cors = require('cors');
 
 /*init ExApp*/
@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 var dbResults = [];
+var tools = new Tools();
 
 /*get films from model*/
 var query = Films.find();
@@ -82,6 +83,25 @@ app.post('/addfilm/token=myapp', function (req, res) {
         }
         else{
             console.error('Error ,value allready exist in DB');
+        }
+    });
+});
+
+app.post('/addnewuser/token=myapp', function(req, res){
+    Films.find({
+        where : {
+            user_email : req.body.userEmail
+        }
+    }, function(error, film){
+        if(!error){
+            if(!film.length){
+                tools.sendMail(req.body.userEmail, 'Greetings!', 'Thank you for using WatchHelper app.', '<b>You can start searching your favorite films at FS.TO</b>');
+
+                res.send('message sent');
+            }
+        }
+        else{
+            console.error('error in addnewuser DB query', error);
         }
     });
 });

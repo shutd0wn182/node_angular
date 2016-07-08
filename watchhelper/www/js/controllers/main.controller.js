@@ -24,6 +24,7 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
                             });
                         } else {
                             this.showList = toolsFactory.setCookie('userEmail', this.email, 60*60*24*14*1000);
+                            filmFactory.mailNewUser(this.email);
                             this.userEmail = this.email;
                             this.getFilmData();
                         }
