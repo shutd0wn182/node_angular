@@ -25,7 +25,6 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 var dbResults = [];
-// var urlDB = "postgres://iwsgbhihwkrmxn:0FpUatSuvlc_u4iE_ERk0gGm7I@ec2-54-243-201-144.compute-1.amazonaws.com:5432/d6t02bvudsqu1n";
 
 /*get films from model*/
 var query = Films.find();

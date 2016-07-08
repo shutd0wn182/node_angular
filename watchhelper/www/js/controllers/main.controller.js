@@ -1,6 +1,6 @@
 angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFactory', '$ionicPopup', '$scope', function (filmFactory, toolsFactory, $ionicPopup, $scope) {
-    // var dbUrl = 'http://localhost:5000/getfilms/token=myapp';
-    var dbUrl = 'https://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
+    var dbUrl = 'http://localhost:5000/getfilms/token=myapp';
+    // var dbUrl = 'https://evening-oasis-38864.herokuapp.com/getfilms/token=myapp';
     /*create PopUP*/
 
     this.showPopup = function () {
@@ -14,30 +14,22 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
                     text: '<b>Save</b>',
                     type: 'button-positive',
                     onTap: function(e) {
-                        if (!$scope.mC.email) {
+                        if (!this.email) {
                             e.preventDefault();
                             $ionicPopup.alert({
                                 title : 'Validation Error',
                                 template : 'Email not valid'
                             });
                         } else {
-                            $scope.mC.showList = toolsFactory.setCookie('userEmail', $scope.mC.email, 60*60*24*14*1000);
+                            this.showList = toolsFactory.setCookie('userEmail', this.email, 60*60*24*14*1000);
+                            this.userEmail = this.email;
+                            this.getFilmData();
                         }
-                    }
+                    }.bind(this)
                 }
             ]
         });
     };
-
-    /*run popup*/
-    this.userEmail = toolsFactory.getCookie('userEmail');
-
-    if(!this.userEmail){
-        this.showPopup();
-    }
-    else{
-        this.showList = true;
-    }
 
     this.getFilmData = function () {
         filmFactory.getFilmData(dbUrl, this.userEmail).then(function (value) {
@@ -45,12 +37,23 @@ angular.module('watchHelper').controller('mainCtrl', ['filmFactory', 'toolsFacto
         }.bind(this));
     };
 
-    this.getFilmData();
-
     this.addFilm = function () {
         filmFactory.addFilm(this.url, this.email).then(function (value) {
             this.getFilmData();
             this.url = '';
         }.bind(this));
     };
+
+    /*run popup*/
+
+    this.userEmail = toolsFactory.getCookie('userEmail');
+
+    if(!this.userEmail){
+        this.showPopup();
+    }
+    else{
+        this.getFilmData();
+        this.showList = true;
+    }
+
 }]);
