@@ -121,10 +121,10 @@ PageParser.prototype.checkDbValue = function (_name, _series, _user_email) {
         where : {
             name : _name,
             user_email : _user_email,
-            // series : {
-            //     ne : _series
-            // }
-            series : _series
+            series : {
+                ne : _series
+            }
+            // series : _series
         }
     },function (err, film) {
         if(!err){
