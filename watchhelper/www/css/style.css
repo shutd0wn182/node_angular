@@ -58,3 +58,7 @@ ion-content.layer .list a{
     border: 2px solid blanchedalmond;
     color: blanchedalmond;
 }
+#input-film-url,
+#input-film-url::-webkit-input-placeholder{
+    color: #fff;
+}
