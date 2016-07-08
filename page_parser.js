@@ -98,7 +98,7 @@ PageParser.prototype.addToDb = function (_name, _poster, _season, _series) {
 };
 
 PageParser.prototype.setCronJob = function () {
-    this.cronJob = cron.schedule('0 */2 * * * *', function() {
+    this.cronJob = cron.schedule('0 */20 * * * *', function() {
         var pageData;
 
         console.log('=== new CRON job start... ===');
