@@ -4,15 +4,16 @@ angular.module('watchHelper').factory('toolsFactory', ['$cookies', function($coo
 
     return {
         setCookie : function (_name, _value, _expires) {
-            var date = new Date();
-            var expiresDate = new Date(date.getTime() + _expires);
-            $cookies.put(_name, _value, {expires : expiresDate});
-
+            // var date = new Date();
+            // var expiresDate = new Date(date.getTime() + _expires);
+            // $cookies.put(_name, _value, {expires : expiresDate});
+            window.localStorage.setItem(_name, _value);
             return true;
         },
 
         getCookie : function(_name){
-            return $cookies.get(_name);
+            return window.localStorage.getItem(_name);
+            // return $cookies.get(_name);
         }
     }
 }]);

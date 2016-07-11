@@ -30,7 +30,7 @@ PageParser.prototype.getPageInfo = function () {
 
                 var film = {
                     name : $('.b-tab-item__title-inner').children('span').text().replace(/\s\s+/g, ' '),
-                    poster : $('.poster-main img').attr('src'),
+                    poster : 'http:' + $('.poster-main img').attr('src'),
                     season : Number($infoBlock.split('серия')[0].split('сезон')[1]),
                     series : ($infoBlock.split('серия')[1].indexOf('(финал)') > -1) ? Number($infoBlock.split('серия')[1].split('(финал)')[0]) :
                         Number($infoBlock.split('серия')[1]),
