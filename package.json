@@ -19,6 +19,7 @@
     "mongodb": "^2.1.18",
     "node-cron": "~1.1.1",
     "nodemailer": "^2.4.2",
+    "nodemailer-smtp-transport": "^2.6.0",
     "pg": "4.x",
     "promise": "^7.1.1",
     "request": "^2.72.0"

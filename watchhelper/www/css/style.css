@@ -26,7 +26,7 @@ ion-content.layer .list a{
 }
 .popup-title {
     font-size: 30px;
-    color: blanchedalmond;
+    color: white;
 }
 .popup-sub-title{
     font-size: 17px;
@@ -38,7 +38,7 @@ ion-content.layer .list a{
 }
 .user-email .popup-body{
     padding: 0;
-    border-bottom: 2px solid blanchedalmond;
+    border-bottom: 2px solid white;
 }
 .popup-container .popup-body > span{
     font-size: 20px;
@@ -55,8 +55,8 @@ ion-content.layer .list a{
 }
 .popup-buttons .button.button-positive{
     background-color: rgba(0,0,0,0);
-    border: 2px solid blanchedalmond;
-    color: blanchedalmond;
+    border: 2px solid white;
+    color: white;
 }
 #input-film-url,
 #input-film-url::-webkit-input-placeholder{
